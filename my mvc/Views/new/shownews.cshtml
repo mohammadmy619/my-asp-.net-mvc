@@ -1,0 +1,87 @@
+﻿@model DataLaayer.page
+
+@{
+    ViewBag.Title = "shownews";
+}
+
+<ul class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">خانه </a></li>
+    <li class="breadcrumb-item"><a href="/archive>اخبار </a></li>
+    <li class="breadcrumb-item"><a href="#">@Model.PageGroup.GroupTitle</a></li>
+    <li class="breadcrumb-item active">@Model.Title </li>
+</ul>
+<section class="single-news border-radius">
+    <header><h2> @Model.Title </h2> <span> <i class="fa fa-calendar"></i>  انتشار :@Model.CreateDate.ToShamsi() </span></header>
+    <article>
+        <p>
+            @Model.ShortDescription
+        </p>
+        <div>
+            <img src="~/PageImages/@Model.ImageName" class="thumbnail" style="max-width:100%" />
+        </div>
+        <p>
+            @Html.Raw(Model.Text)
+        </p>
+    </article>
+</section>
+<div class="keywords border-radius">
+    @if (Model.Tages != null)
+     {
+
+      foreach (var item in Model.Tages.Split(','))
+        {
+
+        <a href="/Search?q=@item"> @item </a>
+
+          }
+
+
+    }
+    else
+    {
+    <a>جای تگ خالی </a>
+
+    }
+</div>
+<section class="comment-layer">
+    <header> <i class="fa fa-comments"></i><h5> دیدگاه کاربران </h5><span> @Model.PageComments.Count() دیدگاه </span> </header>
+    <ul id="you">
+
+        @Html.Action("showcomments", "new")
+
+    </ul>
+
+
+    <h6> شما هم دیدگاه خود را ارسال کنید </h6>
+    <form class="comment-form" action="" method="post">
+        <div>
+            <input placeholder=" نام و نام خانوادگی" type="text" id="txtName">
+            <input placeholder=" ایمیل خود را وارد نمایید " type="email" id="txtEmail">
+
+        </div>
+        <textarea placeholder=" متن دیدگاه" id="txtComment"> </textarea>
+        <input value="ثبت دیدگاه ارزشمند شما " type="button" onclick="addComment()">
+    </form>
+</section>
+
+<script>
+    function addComment() {
+        $.ajax({
+            url: "/new/AddComment/" + @Model.PageID,
+            type: "Get",
+            data: { name: $("#txtName").val(), email: $("#txtEmail").val(), comment: $("#txtComment").val() }
+          }).done(function(result) {
+
+            $("#you").html(result);
+            $("#txtName").val("");
+            $("#txtEmail").val("");
+            $("#txtComment").val("");
+
+        });
+    }
+</script>
+
+
+
+
+

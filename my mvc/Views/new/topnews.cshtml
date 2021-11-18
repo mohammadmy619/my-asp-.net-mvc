@@ -1,0 +1,16 @@
+﻿@model IEnumerable<DataLaayer.page>
+
+<ul>
+    @foreach (var item in Model)
+    {
+        <li>
+            <img class="border-radius" src="/PageImages/@item.ImageName">
+
+            @*<img class="border-radius" src="/Content/img/thumb.png">*@
+            <h2> <a href="/new/@item.PageID">@item.Title</a></h2>
+            <span>انتشار : @item.CreateDate.Date.ToShamsi()</span>
+        </li>
+
+    }
+  
+</ul>
